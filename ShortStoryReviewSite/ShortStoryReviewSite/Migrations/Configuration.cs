@@ -1,5 +1,6 @@
 namespace ShortStoryReviewSite.Migrations
 {
+    using Models;
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
@@ -14,18 +15,92 @@ namespace ShortStoryReviewSite.Migrations
 
         protected override void Seed(ShortStoryReviewSite.Models.ApplicationDbContext context)
         {
-            //  This method will be called after migrating to the latest version.
-
-            //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
-            //  to avoid creating duplicate seed data. E.g.
-            //
-            //    context.People.AddOrUpdate(
-            //      p => p.FullName,
-            //      new Person { FullName = "Andrew Peters" },
-            //      new Person { FullName = "Brice Lambson" },
-            //      new Person { FullName = "Rowan Miller" }
-            //    );
-            //
+            context.Stories.AddOrUpdate(
+                s => s.Title,
+                new Story
+                {
+                    Title = "Writing1",
+                    Author = "Jason",
+                    Genre = StoryGenre.Comedy,
+                    FilePath = @"~/Content/Texts/Writing1.txt",
+                    Score = 0,
+                    SubmissionDate = Convert.ToDateTime("1/1/1")
+                },
+                new Story
+                {
+                    Title = "Writing2",
+                    Author = "Jason",
+                    Genre = StoryGenre.Comedy,
+                    FilePath = @"~/Content/Texts/Writing2.txt",
+                    Score = 0,
+                    SubmissionDate = Convert.ToDateTime("2/2/2")
+                },
+                new Story
+                {
+                    Title = "Writing3",
+                    Author = "Jason",
+                    Genre = StoryGenre.Comedy,
+                    FilePath = @"~/Content/Texts/Writing3.txt",
+                    Score = 0,
+                    SubmissionDate = Convert.ToDateTime("3/3/3")
+                },
+                new Story
+                {
+                    Title = "Writing4",
+                    Author = "Jason",
+                    Genre = StoryGenre.Comedy,
+                    FilePath = @"~/Content/Texts/Writing4.txt",
+                    Score = 0,
+                    SubmissionDate = Convert.ToDateTime("4/4/4")
+                }
+                );
+            context.Reviews.AddOrUpdate(
+                r => r.Id,
+                new Review()
+                {
+                    StoryId = 1,
+                    UserName = "Jason",
+                    Score = 1,
+                    ReviewDate = Convert.ToDateTime("1/1/1"),
+                    ReviewText = 
+                    @"
+                        Really good. Great words.
+                     "
+                },
+                new Review()
+                {
+                    StoryId = 2,
+                    UserName = "Carl",
+                    Score = 2,
+                    ReviewDate = Convert.ToDateTime("2/2/2"),
+                    ReviewText =
+                    @"
+                        Really bad. Terrible words.
+                     "
+                },
+                new Review()
+                {
+                    StoryId = 3,
+                    UserName = "Abe",
+                    Score = 3,
+                    ReviewDate = Convert.ToDateTime("3/3/3"),
+                    ReviewText =
+                    @"
+                        It was okay. Mediocre words.
+                     "
+                },
+                new Review()
+                {
+                    StoryId = 4,
+                    UserName = "Bill",
+                    Score = 4,
+                    ReviewDate = Convert.ToDateTime("4/4/4"),
+                    ReviewText =
+                    @"
+                        WHAT A MASTERPIECE!!!
+                     "
+                }
+                );
         }
     }
 }

@@ -1,0 +1,22 @@
+﻿@model IEnumerable<ShortStoryReviewSite.Models.Review>
+
+@{
+    ViewBag.Title = "Story Reviews";
+}
+<h2>Reviews for @ViewBag.StoryTitle</h2>
+
+<table class="table">
+    @foreach (var review in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => review.UserName) <br />
+                @Html.DisplayFor(modelItem => review.ReviewDate) <br />
+                @Html.DisplayFor(modelItem => review.ReviewText) <br />
+            </td>
+        </tr>
+    }
+</table>
+@Html.ActionLink("Add a review", "UserCreate", "Reviews", new { ID = ViewBag.Id }, null) <br />
+@Html.ActionLink("Return to story List.", "ListStories", "Stories")
+
