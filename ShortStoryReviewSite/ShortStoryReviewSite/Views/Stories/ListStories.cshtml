@@ -1,14 +1,29 @@
 ﻿@model IEnumerable<ShortStoryReviewSite.Models.Story>
 @{
-    ViewBag.Title = "ListStories";
+    ViewBag.Title = "Stories";
 }
 <h2>Stories</h2>
-@{Html.BeginForm("Search", "Stories", FormMethod.Get);}
-<input type="text" name="q" value="" />
-<input type="submit" value="Search" />
-@{Html.EndForm();}
-&nbsp;
-
+@using (Html.BeginForm())
+{
+    <div id="FilterSearch" class="form-horizontal">
+        <div class="form-group">
+            @Html.Label("Search by Title", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.TextBox("searchCriteria", null, new { @class = "form-control" })
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Filter" class="btn col-md-2 col-md-offset-2" />
+            <input type="button" value="Reset Filter" onclick="location.href='@Url.Action("ListStories", "Stories")'" class="btn col-md-2 col-md-offset-1" />
+        </div>
+    </div>
+}
+<div>
+    <p>Sort by: 
+        @Html.ActionLink("Title", "ListStories", new { sortOrder = "Title" })
+        @Html.ActionLink("Author", "ListStories", new { sortOrder = "Author" })
+        @Html.ActionLink("Genre", "ListStories", new { sortOrder = "Genre" })
+        @Html.ActionLink("Score", "ListStories", new { sortOrder = "Score" })
+    </p>
+</div>
 <table class="table">
     @foreach (var item in Model)
     {
@@ -17,6 +32,7 @@
                 @Html.ActionLink(item.Title, "Details", new { id = item.Id }) <br />
                 @Html.DisplayFor(modelItem => item.Author) <br />
                 @Html.DisplayFor(modelItem => item.Genre) <br />
+                Score: @Html.DisplayFor(modelItem => item.Score) <br />
                 @Html.ActionLink("Reviews", "ListOfReviewsByStory", "Reviews", new { id = item.Id }, null)
             </td>
         </tr>

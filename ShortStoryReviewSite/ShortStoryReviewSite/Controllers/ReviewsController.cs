@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using ShortStoryReviewSite.Models;
+using ShortStoryReviewSite.CustomAttributes;
 
 namespace ShortStoryReviewSite.Controllers
 {
@@ -16,10 +17,11 @@ namespace ShortStoryReviewSite.Controllers
 
         // GET: Reviews
         [HttpGet]
+        [AuthorizeOrRedirectAttribute(Roles = "SiteAdmin, ReviewAdmin")]
         public ActionResult Index(string sortOrder)
         {
-            IEnumerable <Review> reviews = from r in db.Reviews
-                           select r;
+            IEnumerable<Review> reviews = from r in db.Reviews
+                                          select r;
 
             switch (sortOrder)
             {
@@ -36,6 +38,7 @@ namespace ShortStoryReviewSite.Controllers
             return View(reviews);
         }
         [HttpPost]
+        [AuthorizeOrRedirectAttribute(Roles = "SiteAdmin, ReviewAdmin")]
         public ActionResult Index(string searchCriteria, string cityFilter)
         {
             IEnumerable<Review> reviews = from r in db.Reviews
@@ -53,8 +56,11 @@ namespace ShortStoryReviewSite.Controllers
                 .ToList();
             var story = db.Stories.Find(ID);
             ViewBag.StoryTitle = story.Title;
+            ViewBag.Id = story.Id;
+            storyReviews.OrderByDescending(r => r.ReviewDate);
             return View(storyReviews);
         }
+
         [HttpGet]
         public ActionResult UserCreate()
         {
@@ -62,18 +68,20 @@ namespace ShortStoryReviewSite.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult UserCreate(Review review, int ID)
+        public ActionResult UserCreate(Review review, int id)
         {
+            review.StoryId = id;
+            review.ReviewDate = DateTime.Today;
             if (ModelState.IsValid)
             {
-                review.Id = ID;
                 db.Reviews.Add(review);
                 db.SaveChanges();
-                return RedirectToAction("ListOfReviewsByBrewery", new { id = review.Id });
+                return RedirectToAction("ListStories", "Stories");
             }
             return View(review);
         }
         // GET: Reviews/Details/5
+        [AuthorizeOrRedirectAttribute(Roles = "SiteAdmin, ReviewAdmin")]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -89,8 +97,10 @@ namespace ShortStoryReviewSite.Controllers
         }
 
         // GET: Reviews/Create
+        [AuthorizeOrRedirectAttribute(Roles = "SiteAdmin, ReviewAdmin")]
         public ActionResult Create()
         {
+
             return View();
         }
 
@@ -99,8 +109,22 @@ namespace ShortStoryReviewSite.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,StoryId,UserName,Score,ReviewText,ReviewDate")] Review review)
+        [AuthorizeOrRedirectAttribute(Roles = "SiteAdmin, ReviewAdmin")]
+        public ActionResult Create([Bind(Include = "Id,StoryId,UserName,Score,ReviewText,ReviewDate")] Review review, bool upvote)
         {
+            review.ReviewDate = DateTime.Today;
+            Story story = new Story();
+            IEnumerable<Story> stories = new List<Story>();
+            stories = db.Stories.ToList();
+            story = (Story)stories.Where(s => s.Id == review.StoryId);
+            if (upvote == true)
+            {
+                story.Score++;
+            }
+            else
+            {
+                story.Score--;
+            }
             if (ModelState.IsValid)
             {
                 db.Reviews.Add(review);
@@ -112,6 +136,7 @@ namespace ShortStoryReviewSite.Controllers
         }
 
         // GET: Reviews/Edit/5
+        [AuthorizeOrRedirectAttribute(Roles = "SiteAdmin, ReviewAdmin")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -131,6 +156,7 @@ namespace ShortStoryReviewSite.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AuthorizeOrRedirectAttribute(Roles = "SiteAdmin, ReviewAdmin")]
         public ActionResult Edit([Bind(Include = "Id,StoryId,UserName,Score,ReviewText,ReviewDate")] Review review)
         {
             if (ModelState.IsValid)
@@ -143,6 +169,7 @@ namespace ShortStoryReviewSite.Controllers
         }
 
         // GET: Reviews/Delete/5
+        [AuthorizeOrRedirectAttribute(Roles = "SiteAdmin, ReviewAdmin")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -160,6 +187,7 @@ namespace ShortStoryReviewSite.Controllers
         // POST: Reviews/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [AuthorizeOrRedirectAttribute(Roles = "SiteAdmin, ReviewAdmin")]
         public ActionResult DeleteConfirmed(int id)
         {
             Review review = db.Reviews.Find(id);

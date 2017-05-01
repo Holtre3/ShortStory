@@ -21,10 +21,46 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Stories", "ListStories", "Stories")</li>
-                    <li>@Html.ActionLink("Reviews", "Index", "Reviews")</li>
-                    <li>@Html.ActionLink("Submit", "AddWriting", "Stories")</li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Stories<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("View Stories", "ListStories", "Stories")</li>
+                            <li>@Html.ActionLink("Submit Story", "Create", "Stories")</li>
+                        </ul>
+                    @if (User.IsInRole("SiteAdmin") || User.IsInRole("StoryAdmin") || User.IsInRole("ReviewAdmin"))
+                    {
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin Functions<b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                @if (User.IsInRole("SiteAdmin"))
+                                {
+                                    <li>@Html.ActionLink("Site Administration", "Admin", "Home")</li>
+                                    <li>@Html.ActionLink("Manage Users", "Index", "Account")</li>
+                                    <li>@Html.ActionLink("Manage Roles", "Index", "IdentityRole")</li>
+                                    <li>@Html.ActionLink("Manage Upcoming Events", "Index", "Events")</li>
+                                }
+                                @if (User.IsInRole("StoryAdmin") || User.IsInRole("SiteAdmin"))
+                                {
+                                    <li>@Html.ActionLink("Short Story Admininistration", "Index", "Stories")</li>
+                                }
+                                @if (User.IsInRole("ReviewAdmin") || User.IsInRole("SiteAdmin"))
+                                {
+                                    <li>@Html.ActionLink("Review Admininistration", "Index", "Reviews")</li>
+                                }
+                            </ul>
+                        </li>
+                        <li>
+                            <div style="margin:18px">
+                                @{Html.BeginForm("Search", "Stories", FormMethod.Get);}
+                                <input type="text" name="q" value="" />
+                                <input type="submit" value="Search Stories" />
+                                @{Html.EndForm();}
+                            </div>
+                            
+                        </li>
+                    }
                 </ul>
+                
                 @Html.Partial("_LoginPartial")
             </div>
         </div>

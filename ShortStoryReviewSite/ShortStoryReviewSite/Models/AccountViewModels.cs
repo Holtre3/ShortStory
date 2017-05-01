@@ -52,7 +52,7 @@ namespace ShortStoryReviewSite.Models
         [Display(Name = "Email")]
         [EmailAddress]
         public string Email { get; set; }
-
+        public string UserName { get; set; }
         [Required]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
@@ -64,11 +64,17 @@ namespace ShortStoryReviewSite.Models
 
     public class RegisterViewModel
     {
+        [Key]
+        [Required]
+        [Display(Name = "User Name")]
+        public string UserName { get; set; }
         [Required]
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }
-
+        [Phone]
+        [Required]
+        public string PhoneNumber { get; set; }
         [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
         [DataType(DataType.Password)]
@@ -108,5 +114,86 @@ namespace ShortStoryReviewSite.Models
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }
+    }
+    public class EditUserViewModel
+    {
+        public EditUserViewModel() { }
+
+        // Allow Initialization with an instance of ApplicationUser:
+        public EditUserViewModel(ApplicationUser user)
+        {
+            this.UserName = user.UserName;
+            this.PhoneNumber = user.PhoneNumber;
+            this.Email = user.Email;
+            this.Password = user.PasswordHash;
+        }
+
+        [Key]
+        [Required]
+        [Display(Name = "User Name")]
+        public string UserName { get; set; }
+        [Required]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [DataType(DataType.Password)]
+        [Display(Name = "Password")]
+        public string Password { get; set; }
+
+        [DataType(DataType.Password)]
+        [Display(Name = "Confirm password")]
+        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        public string ConfirmPassword { get; set; }
+        [Phone]
+        [Required]
+        public string PhoneNumber { get; set; }
+        [Required]
+        public string Email { get; set; }
+
+    }
+
+    public class CreateUserViewModel
+    {
+        public CreateUserViewModel() { }
+
+        // Allow Initialization with an instance of ApplicationUser:
+        public CreateUserViewModel(ApplicationUser user)
+        {
+            this.UserName = user.UserName;
+            this.PhoneNumber = user.PhoneNumber;
+            this.Email = user.Email;
+        }
+
+        [Key]
+        [Required]
+        [Display(Name = "User Name")]
+        public string UserName { get; set; }
+        [Required]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [DataType(DataType.Password)]
+        [Display(Name = "Password")]
+        public string Password { get; set; }
+
+        [DataType(DataType.Password)]
+        [Display(Name = "Confirm password")]
+        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        public string ConfirmPassword { get; set; }
+        [Phone]
+        [Required]
+        public string PhoneNumber { get; set; }
+
+        [Required]
+        public string Email { get; set; }
+
+    }
+    public class RoleViewModel
+    {
+        public RoleViewModel()
+        {
+
+        }
+        public int Id { get; set; }
+        [Required]
+        [Display(Name = "Role Name")]
+        public string Name { get; set; }
+        // GET: IdentityRole
     }
 }

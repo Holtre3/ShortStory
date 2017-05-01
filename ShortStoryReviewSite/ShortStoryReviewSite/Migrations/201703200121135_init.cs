@@ -52,13 +52,13 @@ namespace ShortStoryReviewSite.Migrations
                         Id = c.Int(nullable: false, identity: true),
                         Title = c.String(nullable: false, maxLength: 200),
                         Author = c.String(nullable: false, maxLength: 200),
-                        FilePath = c.String(nullable: false),
+                        StoryContent = c.String(nullable: false),
                         Genre = c.Int(nullable: false),
                         Score = c.Double(nullable: false),
                         SubmissionDate = c.DateTime(nullable: false),
                     })
                 .PrimaryKey(t => t.Id);
-            
+                
             CreateTable(
                 "dbo.AspNetUsers",
                 c => new

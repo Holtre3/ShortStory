@@ -1,0 +1,72 @@
+﻿@using ShortStoryReviewSite.Models;
+@model IEnumerable<ShortStoryReviewSite.Models.Story>
+
+@*CODE ADAPTED FROM http://www.dotnetfunda.com/articles/show/2915/carousel-sliders-in-bootstrap*@
+<div class="thumbnail">
+    <div class="row">
+        <div class="text-center">
+            <h1>Monthly Best</h1>
+        </div>
+    </div>
+
+    <div id="DemoCarousel" class="carousel slide" data-interval="10000" data-ride="carousel">
+        <!-- Carousel indicators -->
+        <ol class="carousel-indicators">
+            <li data-target="#DemoCarousel" data-slide-to="0" class="active"></li>
+            <li data-target="#DemoCarousel" data-slide-to="1"></li>
+            <li data-target="#DemoCarousel" data-slide-to="2"></li>
+        </ol>
+        <!-- Carousel items -->
+        <div class="carousel-inner">
+            <div class="item active">
+                <h2>First Place</h2>
+                <div class="carousel-caption">
+                    <h3>Title: @ViewBag.FirstPlaceTitle</h3>
+                    <br />
+                    <p>Author: @ViewBag.FirstPlaceAuthor</p>
+                    <p>Score: @ViewBag.FirstPlaceScore</p>
+                </div>
+            </div>
+
+            <div class="item">
+                <h2>Second Place</h2>
+                <div class="carousel-caption">
+                    <h3>Title: @ViewBag.SecondPlaceTitle</h3>
+                    <br />
+                    <p>Author: @ViewBag.SecondPlaceAuthor</p>
+                    <p>Score: @ViewBag.SecondPlaceScore</p>
+                </div>
+            </div>
+            <div class="item">
+                <h2>Third Place</h2>
+                <div class="carousel-caption">
+                    <h3>Title: @ViewBag.ThirdPlaceTitle</h3>
+                    <br />
+                    <p>Author: @ViewBag.ThirdPlaceAuthor</p>
+                    <p>Score: @ViewBag.ThirdPlaceScore</p>
+                </div>
+            </div>
+        </div>
+        <!-- Carousel Controls -->
+        <a class="carousel-control left" href="#DemoCarousel" data-slide="prev">
+            <span class="glyphicon glyphicon-chevron-left"></span>
+        </a>
+        <a class="carousel-control right" href="#DemoCarousel" data-slide="next">
+            <span class="glyphicon glyphicon-chevron-right"></span>
+        </a>
+    </div>
+</div>
+<style>
+    .item {
+        background: #333;
+        text-align: center;
+        height: 300px !important;
+    }
+
+    h2 {
+        margin: 0;
+        color: #888;
+        padding-top: 100px;
+        font-size: 50px;
+    }
+</style>

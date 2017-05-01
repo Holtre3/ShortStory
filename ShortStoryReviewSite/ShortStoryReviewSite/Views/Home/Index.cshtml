@@ -2,16 +2,29 @@
     ViewBag.Title = "Home";
 }
 
+
 <div class="jumbotron">
     <h1>Short Stories Anonymous</h1>
     <p class="lead">This website is meant to provide writers a place to submit their writing and get feedback on their work.</p>
-    <div class="col-md-4">
-        <p><a href="~/Stories/AddStory" class="btn btn-primary btn-lg">Submit your work &raquo;</a></p>
+    <div class="col-md-4 col-md-offset-2">
+        <p><a href="~/Stories/Create" class="btn btn-primary btn-lg">Submit your work &raquo;</a></p>
     </div>
     <div class="col-md-4">
         <p><a class="btn btn-primary btn-lg" href="~/Stories/ListStories">View Stories &raquo;</a></p>
     </div>
-    <div class="col-md-4">
-        <p><a class="btn btn-primary btn-lg" href="~/Reviews/Index">View Reviews &raquo;</a></p>
+    <div>
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        @{
+            Html.RenderAction("DisplayFrontPageStories", "Home");
+        }
     </div>
+  
+    @{
+        Html.RenderAction("DisplayEvent", "Events");
+    }
 </div>
+

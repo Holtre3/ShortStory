@@ -13,10 +13,11 @@
                 @Html.DisplayFor(modelItem => review.UserName) <br />
                 @Html.DisplayFor(modelItem => review.ReviewDate) <br />
                 @Html.DisplayFor(modelItem => review.ReviewText) <br />
+
             </td>
         </tr>
     }
 </table>
-@Html.ActionLink("Add a review", "UserCreate", "Reviews", new { ID = ViewBag.Id }, null) <br />
+@Html.ActionLink("Add a review", "UserCreate", "Reviews", new { id = ViewBag.Id }, null) <br />
 @Html.ActionLink("Return to story List.", "ListStories", "Stories")
 

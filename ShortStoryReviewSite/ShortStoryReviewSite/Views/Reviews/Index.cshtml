@@ -19,6 +19,9 @@
 <table class="table">
     <tr>
         <th>
+            @Html.ActionLink(@Html.DisplayNameFor(model => model.StoryId).ToString(), "Index", new { sortOrder = "StoryId" })
+        </th>
+        <th>
             @Html.ActionLink(@Html.DisplayNameFor(model => model.UserName).ToString(), "Index", new { sortOrder = "UserName" })
         </th>
         <th>
@@ -35,6 +38,9 @@
 
 @foreach (var item in Model) {
     <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.StoryId)
+        </td>
         <td>
             @Html.DisplayFor(modelItem => item.UserName)
         </td>

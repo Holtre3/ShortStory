@@ -1,0 +1,48 @@
+﻿@model IEnumerable<ShortStoryReviewSite.Models.EditUserViewModel>
+
+@{
+    ViewBag.Title = "Administration";
+}
+
+<h2>User Administration</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+@*@using (Html.BeginForm())
+{
+    <div id="FilterSearch" class="form-horizontal">
+        <div class="form-group">
+            @Html.Label("Search by Name", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.TextBox("searchCriteria", null, new { @class = "form-control" })
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Filter" class="btn col-md-2 col-md-offset-2" />
+            <input type="button" value="Reset Filter" onclick="location.href='@Url.Action("Index", "Account")'" class="btn col-md-2 col-md-offset-1" />
+        </div>
+    </div>
+}*@
+<table class="table">
+    <tr>
+        <th>
+            User
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserName)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { userName = item.UserName }) |
+                @Html.ActionLink("Details", "Details", new { userName = item.UserName }) |
+                @Html.ActionLink("Delete", "Delete", new { userName = item.UserName }) |
+                @Html.ActionLink("Roles", "ViewUsersRoles", new { userName = item.UserName })
+            </td>
+        </tr>
+    }
+
+</table>

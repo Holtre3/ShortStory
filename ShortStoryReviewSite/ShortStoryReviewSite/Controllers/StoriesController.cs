@@ -7,6 +7,8 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using ShortStoryReviewSite.Models;
+using ShortStoryReviewSite.CustomAttributes;
+using System.ComponentModel;
 
 namespace ShortStoryReviewSite.Controllers
 {
@@ -15,13 +17,77 @@ namespace ShortStoryReviewSite.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Stories
-        public ActionResult Index()
+        [AuthorizeOrRedirectAttribute(Roles = "SiteAdmin, StoryAdmin")]
+        public ActionResult Index(string sortOrder, string searchCriteria)
         {
-            return View(db.Stories.ToList());
+            IEnumerable<Story> stories = new List<Story>();
+            stories = db.Stories.ToList();
+
+            if (searchCriteria != null)
+            {
+                stories = stories.Where(story => story.Title.ToUpper().Contains(searchCriteria.ToUpper()));
+            }
+
+            switch (sortOrder)
+            {
+                case "Id":
+                    stories = stories.OrderBy(story => story.Id);
+                    break;
+                case "Title":
+                    stories = stories.OrderBy(story => story.Title);
+                    break;
+                case "Author":
+                    stories = stories.OrderBy(story => story.Author);
+                    break;
+                case "Genre":
+                    stories = stories.OrderBy(story => story.Genre);
+                    break;
+                case "Score":
+                    stories = stories.OrderByDescending(story => story.Score);
+                    break;
+                case "SubmissionDate":
+                    stories = stories.OrderBy(story => story.SubmissionDate.Date).ToList();
+                    break;
+                default:
+                    stories = stories.OrderBy(story => story.Title);
+                    break;
+            }
+
+            return View(stories);
         }
-        public ActionResult ListStories()
+        public ActionResult ListStories(string sortOrder, string searchCriteria)
         {
-            return View(db.Stories.ToList());
+            IEnumerable<Story> stories = new List<Story>();
+            stories = db.Stories.ToList();
+            if (searchCriteria != null)
+            {
+                stories = stories.Where(story => story.Title.ToUpper().Contains(searchCriteria.ToUpper()));
+            }
+            switch (sortOrder)
+            {
+                case "Id":
+                    stories = stories.OrderBy(story => story.Id);
+                    break;
+                case "Title":
+                    stories = stories.OrderBy(story => story.Title);
+                    break;
+                case "Author":
+                    stories = stories.OrderBy(story => story.Author);
+                    break;
+                case "Genre":
+                    stories = stories.OrderBy(story => story.Genre);
+                    break;
+                case "Score":
+                    stories = stories.OrderByDescending(story => story.Score);
+                    break;
+                case "SubmissionDate":
+                    stories = stories.OrderBy(story => story.SubmissionDate.Date).ToList();
+                    break;
+                default:
+                    stories = stories.OrderBy(story => story.Title);
+                    break;
+            }
+            return View(stories);
         }
         public ActionResult Search(string q)
         {
@@ -48,6 +114,8 @@ namespace ShortStoryReviewSite.Controllers
         }
 
         // GET: Stories/Create
+
+        [ValidateInput(false)]
         public ActionResult Create()
         {
             return View();
@@ -58,8 +126,13 @@ namespace ShortStoryReviewSite.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Title,Author,FilePath,Genre,Score,SubmissionDate")] Story story)
+        //[ValidateInput(false)]
+        public ActionResult Create([Bind(Include = "Id,Title,Author,StoryContent,Genre,Score,SubmissionDate")] Story story)
         {
+
+            string text = Server.HtmlEncode(story.StoryContent);
+            story.StoryContent = text;
+            story.SubmissionDate = DateTime.Today;
             if (ModelState.IsValid)
             {
                 db.Stories.Add(story);
@@ -71,6 +144,7 @@ namespace ShortStoryReviewSite.Controllers
         }
 
         // GET: Stories/Edit/5
+        [AuthorizeOrRedirectAttribute(Roles = "SiteAdmin, StoryAdmin")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -90,7 +164,8 @@ namespace ShortStoryReviewSite.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Title,Author,FilePath,Genre,Score,SubmissionDate")] Story story)
+        [AuthorizeOrRedirectAttribute(Roles = "SiteAdmin, StoryAdmin")]
+        public ActionResult Edit([Bind(Include = "Id,Title,Author,StoryContent,Genre,Score,SubmissionDate")] Story story)
         {
             if (ModelState.IsValid)
             {
@@ -102,6 +177,7 @@ namespace ShortStoryReviewSite.Controllers
         }
 
         // GET: Stories/Delete/5
+        [AuthorizeOrRedirectAttribute(Roles = "SiteAdmin, StoryAdmin")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -119,6 +195,7 @@ namespace ShortStoryReviewSite.Controllers
         // POST: Stories/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [AuthorizeOrRedirectAttribute(Roles = "SiteAdmin, StoryAdmin")]
         public ActionResult DeleteConfirmed(int id)
         {
             Story story = db.Stories.Find(id);

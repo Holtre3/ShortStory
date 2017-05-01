@@ -1,0 +1,53 @@
+﻿@model IEnumerable<ShortStoryReviewSite.Models.Event>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-5 col-md-offset-4">
+            <h3>Upcoming Events!</h3>
+        </div>
+    </div>
+</div>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.BeginDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EndDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Message)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FeaturedStory)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BeginDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EndDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Message)
+            </td>
+            <td>
+                Coming in version 2.0!
+                @*@Html.DisplayFor(modelItem => item.FeaturedStory)*@
+            </td>
+        </tr>
+    }
+
+</table>

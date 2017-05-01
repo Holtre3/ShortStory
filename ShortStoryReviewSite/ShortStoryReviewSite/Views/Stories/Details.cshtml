@@ -1,66 +1,43 @@
 ﻿@model ShortStoryReviewSite.Models.Story
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Story: " + Html.DisplayFor(model => model.Title);
 }
-
-<h2>Details</h2>
-
-<div>
-    <h4>Story</h4>
+<br />
+<h4>Author: @Html.DisplayFor(model => model.Author) </h4>
+<h4>Genre: @Html.DisplayFor(model => model.Genre) </h4>
+<p>Submitted: @Html.DisplayFor(model => model.SubmissionDate)</p>
+<p>Score: @Html.DisplayFor(model => model.Score)</p>
+<div class="container">
     <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
+    <div class="row">
+        <div class="text-center">
+            <h2>@Html.DisplayFor(model => model.Title)</h2>
+        </div>
+    </div>
 
-        <dd>
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Author)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Author)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.FilePath)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.FilePath)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Genre)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Genre)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Score)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Score)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.SubmissionDate)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.SubmissionDate)
-        </dd>
-
-    </dl>
+    <div class="row">
+        <div>
+            @Html.Raw(HttpUtility.HtmlDecode(Model.StoryContent))
+        </div>
+    </div>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+<br />
+<br />
+@if (User.IsInRole("SiteAdmin") || User.IsInRole("StoryAdmin"))
+{
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+        @Html.ActionLink("Back to List", "Index") |
+        @Html.ActionLink("View Reviews", "ListOfReviewsByStory", "Reviews", new { id = Model.Id }, null) |
+        @Html.ActionLink("Leave a Review", "Create", "Reviews", new { id = Model.Id }, null)
+    </p>
+}
+else
+{
+    <p>
+        @Html.ActionLink("Back to List", "ListStories") |
+        @Html.ActionLink("View Reviews", "ListOfReviewsByStory", "Reviews", new { id = Model.Id }, null) |
+        @Html.ActionLink("Add a review", "UserCreate", "Reviews", new { ID = ViewBag.Id }, null)
+    </p>
+}
